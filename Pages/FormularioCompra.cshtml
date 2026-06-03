@@ -1,0 +1,52 @@
+@page
+@model SistemaRegistros.Pages.FormularioCompraModel
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">PRUEBA</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/HistorialCompras">Historial de Compras</a>
+    </div>
+</div>
+
+<div class="contenedor">
+    <h1 class="titulo-pagina">Formulario de Compra</h1>
+
+    <div class="formulario-card">
+        <h2>📦 @Model.ProductoSeleccionado?.Nombre</h2>
+        <p style="color:#666; margin-bottom:10px;">@Model.ProductoSeleccionado?.Descripcion</p>
+        <p class="precio" style="margin-bottom:25px;">$@Model.ProductoSeleccionado?.Precio.ToString("N0")</p>
+
+        <form method="post">
+            <input type="hidden" name="Compra.ProductoId" value="@Model.ProductoSeleccionado?.Id" />
+
+            <div class="campo">
+                <label>Nombre</label>
+                <input type="text" name="Compra.NombreCliente" placeholder="Tu nombre" required />
+            </div>
+            <div class="campo">
+                <label>Apellido</label>
+                <input type="text" name="Compra.ApellidoCliente" placeholder="Tu apellido" required />
+            </div>
+            <div class="campo">
+                <label>Correo</label>
+                <input type="email" name="Compra.Correo" placeholder="tucorreo@email.com" required />
+            </div>
+            <div class="campo">
+                <label>Teléfono</label>
+                <input type="text" name="Compra.Telefono" placeholder="Tu teléfono" required />
+            </div>
+            <div class="campo">
+                <label>Dirección de entrega</label>
+                <input type="text" name="Compra.Direccion" placeholder="Tu dirección" required />
+            </div>
+            <div class="campo">
+                <label>Cantidad</label>
+                <input type="number" name="Compra.Cantidad" value="1" min="1" required />
+            </div>
+
+            <button type="submit" class="btn-confirmar">✅ Confirmar Compra</button>
+        </form>
+    </div>
+</div>
+

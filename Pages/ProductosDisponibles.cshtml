@@ -1,0 +1,36 @@
+@page
+@model SistemaRegistros.Pages.ProductosDisponiblesModel
+@{
+    var rol = HttpContext.Session.GetString("UsuarioRol");
+}
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">🛒 TechStore</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/FormularioPQR">PQR</a>
+        @if (rol == "Admin")
+        {
+            <a href="/HistorialCompras">Historial</a>
+            <a href="/AdminPQR">Admin PQR</a>
+        }
+        <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
+    </div>
+</div>
+
+<div class="contenedor">
+    <h1 class="titulo-pagina">Productos Disponibles</h1>
+
+    <div class="grid-productos">
+        @foreach (var item in Model.listaProductos)
+        {
+            <div class="tarjeta-producto">
+                <h3>@item.Nombre</h3>
+                <p>@item.Descripcion</p>
+                <p class="precio">$@item.Precio.ToString("N0")</p>
+                <p class="stock">✅ Stock: @item.Stock unidades</p>
+                <a class="btn-comprar" href="/FormularioCompra?productoId=@item.Id">Comprar</a>
+            </div>
+        }
+    </div>
+</div>

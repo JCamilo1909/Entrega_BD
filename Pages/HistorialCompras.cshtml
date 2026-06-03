@@ -1,0 +1,76 @@
+@page
+@model SistemaRegistros.Pages.HistorialComprasModel
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">PRUEBA</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/HistorialCompras">Historial de Compras</a>
+    </div>
+</div>
+
+<div class="contenedor">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <h1 class="titulo-pagina" style="margin-bottom:0;">Historial de Compras</h1>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <form method="post" enctype="multipart/form-data">
+                <label class="btn-importar">
+                    <span class="texto">IMPORTAR</span>
+                    <input type="file" name="archivoExcel" accept=".xlsx" style="display:none;"
+                           onchange="this.form.submit()" />
+                </label>
+            </form>
+            <a href="/HistorialCompras?handler=ExportarExcel" class="btn-exportar">
+                <span class="texto">EXPORTAR</span>
+            </a>
+        </div>
+    </div>
+
+    @if (Model.listaCompras.Count == 0)
+    {
+        <p style="color:#666; font-size:16px;">No hay compras registradas aún.</p>
+    }
+    else
+    {
+        <table class="tabla-historial">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Cliente</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var compra in Model.listaCompras)
+                {
+                    <tr>
+                        <td>@compra.Id</td>
+                        <td>@compra.NombreCliente @compra.ApellidoCliente</td>
+                        <td>@compra.Correo</td>
+                        <td>@compra.Telefono</td>
+                        <td>@compra.Direccion</td>
+                        <td>@compra.Producto?.Nombre</td>
+                        <td>@compra.Cantidad</td>
+                        <td>$@compra.Total.ToString("N0")</td>
+                        <td>@compra.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td style="display:flex; gap:5px;">
+                            <a href="/EditarCompra?id=@compra.Id" class="btn-accion btn-editar">
+                                <span class="texto">EDITAR</span>
+                            </a>
+                            <a href="/HistorialCompras?handler=Eliminar&id=@compra.Id" class="btn-accion btn-eliminar">
+                                <span class="texto">ELIMINAR</span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

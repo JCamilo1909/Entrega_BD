@@ -1,0 +1,49 @@
+@page
+@model SistemaRegistros.Pages.EditarCompraModel
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">PRUEBA</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/HistorialCompras">Historial de Compras</a>
+    </div>
+</div>
+
+<div class="contenedor">
+    <h1 class="titulo-pagina">Editar Compra</h1>
+
+    <div class="formulario-card">
+        <form method="post">
+            <input type="hidden" name="Compra.Id" value="@Model.Compra.Id" />
+            <input type="hidden" name="Compra.ProductoId" value="@Model.Compra.ProductoId" />
+            <input type="hidden" name="Compra.FechaCompra" value="@Model.Compra.FechaCompra" />
+
+            <div class="campo">
+                <label>Nombre</label>
+                <input type="text" name="Compra.NombreCliente" value="@Model.Compra.NombreCliente" required />
+            </div>
+            <div class="campo">
+                <label>Apellido</label>
+                <input type="text" name="Compra.ApellidoCliente" value="@Model.Compra.ApellidoCliente" required />
+            </div>
+            <div class="campo">
+                <label>Correo</label>
+                <input type="email" name="Compra.Correo" value="@Model.Compra.Correo" required />
+            </div>
+            <div class="campo">
+                <label>Teléfono</label>
+                <input type="text" name="Compra.Telefono" value="@Model.Compra.Telefono" required />
+            </div>
+            <div class="campo">
+                <label>Dirección</label>
+                <input type="text" name="Compra.Direccion" value="@Model.Compra.Direccion" required />
+            </div>
+            <div class="campo">
+                <label>Cantidad</label>
+                <input type="number" name="Compra.Cantidad" value="@Model.Compra.Cantidad" min="1" required />
+            </div>
+
+            <button type="submit" class="btn-confirmar">✅ Guardar Cambios</button>
+        </form>
+    </div>
+</div>
