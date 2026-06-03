@@ -2703,7 +2703,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Juan Camilo\\.nuget\\packages\\": {}
+    "C:\\Users\\pracit3\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -2711,11 +2711,11 @@
       "projectUniqueName": "D:\\WORK\\SistemaRegistros\\SistemaRegistros.csproj",
       "projectName": "SistemaRegistros",
       "projectPath": "D:\\WORK\\SistemaRegistros\\SistemaRegistros.csproj",
-      "packagesPath": "C:\\Users\\Juan Camilo\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\pracit3\\.nuget\\packages\\",
       "outputPath": "D:\\WORK\\SistemaRegistros\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Juan Camilo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\pracit3\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -3208,7 +3208,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "El paquete \"System.IO.Packaging\" 6.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-f32c-w444-8ppv",
+      "message": "Package 'System.IO.Packaging' 6.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-f32c-w444-8ppv",
       "libraryId": "System.IO.Packaging",
       "targetGraphs": [
         "net10.0"
@@ -3218,7 +3218,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "El paquete \"System.IO.Packaging\" 6.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-qj66-m88j-hmgj",
+      "message": "Package 'System.IO.Packaging' 6.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj",
       "libraryId": "System.IO.Packaging",
       "targetGraphs": [
         "net10.0"

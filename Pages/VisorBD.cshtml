@@ -1,0 +1,132 @@
+@page
+@model SistemaRegistros.Pages.VisorBDModel
+
+@{
+    var rol = HttpContext.Session.GetString("UsuarioRol");
+}
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">PRUEBA</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/FormularioPQR">PQRS</a>
+        <a href="/HistorialCompras">Historial</a>
+        @if (rol == "Admin")
+        {
+            <a href="/AdminPQR">Admin PQRS</a>
+            <a href="/VisorBD">📊 Base de Datos</a>
+        }
+        <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
+    </div>
+</div>
+
+
+<div class="contenedor">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <h1 class="titulo-pagina" style="margin-bottom:0;">📊 Visor de Base de Datos</h1>
+        <span style="color:#666; font-size:13px;">🔄 Actualizando cada 5 segundos...</span>
+    </div>
+
+    <!-- USUARIOS -->
+    <h2 style="color:#1a1a2e; font-size:18px; margin-bottom:15px; border-left:4px solid #e94560; padding-left:10px;">👥
+        Usuarios</h2>
+        <table class="tabla-historial" style="margin-bottom:35px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model.listaUsuarios)
+                {
+                    <tr>
+                        <td>@usuario.Id</td>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Correo</td>
+                        <td>
+                            <span
+                                style="background:@(usuario.Rol == "Admin" ? "#e94560" : "#28a745"); color:white; padding:3px 10px; border-radius:20px; font-size:12px;">
+                                @usuario.Rol
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- COMPRAS -->
+        <h2 style="color:#1a1a2e; font-size:18px; margin-bottom:15px; border-left:4px solid #e94560; padding-left:10px;">🛒
+            Compras</h2>
+            <table class="tabla-historial" style="margin-bottom:35px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Correo</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var compra in Model.listaCompras)
+                    {
+                        <tr>
+                            <td>@compra.Id</td>
+                            <td>@compra.NombreCliente @compra.ApellidoCliente</td>
+                            <td>@compra.Correo</td>
+                            <td>@compra.Producto?.Nombre</td>
+                            <td>@compra.Cantidad</td>
+                            <td>$@compra.Total.ToString("N0")</td>
+                            <td>@compra.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- PQRS -->
+            <h2 style="color:#1a1a2e; font-size:18px; margin-bottom:15px; border-left:4px solid #e94560; padding-left:10px;">📨
+                PQRs</h2>
+                <table class="tabla-historial" style="margin-bottom:35px;">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tipo</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Mensaje</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pqr in Model.listaPQRs)
+                        {
+                            <tr>
+                                <td>@pqr.Id</td>
+                                <td>@pqr.Tipo</td>
+                                <td>@pqr.Nombre</td>
+                                <td>@pqr.Correo</td>
+                                <td>@pqr.Mensaje</td>
+                                <td>
+                                    <span
+                                        style="background:@(pqr.Estado == "Resuelto" ? "#28a745" : pqr.Estado == "En proceso" ? "#e6a817" : "#dc3545"); color:white; padding:3px 10px; border-radius:20px; font-size:12px;">
+                                        @pqr.Estado
+                                    </span>
+                                </td>
+                                <td>@pqr.FechaEnvio.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+                setTimeout(function () {
+                    location.reload();
+                }, 5000);
+            </script>

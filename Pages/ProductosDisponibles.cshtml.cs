@@ -14,9 +14,13 @@ namespace SistemaRegistros.Pages
         {
             _productoGestor = productoGestor;
         }
-
         public void OnGet()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UsuarioRol")))
+            {
+                Response.Redirect("/Login");
+                return;
+            }
             listaProductos = _productoGestor.ObtenerTodos();
         }
     }

@@ -10,11 +10,11 @@
         "projectUniqueName": "D:\\WORK\\SistemaRegistros\\SistemaRegistros.csproj",
         "projectName": "SistemaRegistros",
         "projectPath": "D:\\WORK\\SistemaRegistros\\SistemaRegistros.csproj",
-        "packagesPath": "C:\\Users\\Juan Camilo\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\pracit3\\.nuget\\packages\\",
         "outputPath": "D:\\WORK\\SistemaRegistros\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Juan Camilo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\pracit3\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

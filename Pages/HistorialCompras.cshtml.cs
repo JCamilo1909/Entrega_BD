@@ -1,6 +1,7 @@
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SistemaRegistros.Data;
 using SistemaRegistros.Models;
 using SistemaRegistros.Services;
 
@@ -10,18 +11,36 @@ namespace SistemaRegistros.Pages
     {
         private readonly CompraGestor _compraGestor;
         private readonly ProductoGestor _productoGestor;
+        private readonly BaseDatos _db;
 
         public List<Compra> listaCompras { get; set; } = new List<Compra>();
 
-        public HistorialComprasModel(CompraGestor compraGestor, ProductoGestor productoGestor)
+        public HistorialComprasModel(CompraGestor compraGestor, ProductoGestor productoGestor, BaseDatos db)
         {
             _compraGestor = compraGestor;
             _productoGestor = productoGestor;
+            _db = db;
         }
 
         public void OnGet()
         {
-            listaCompras = _compraGestor.ObtenerTodos();
+            var rol = HttpContext.Session.GetString("UsuarioRol");
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+            if (rol == "Admin")
+            {
+                listaCompras = _compraGestor.ObtenerTodos();
+            }
+            else
+            {
+                var todasLasCompras = _compraGestor.ObtenerTodos();
+                var usuario = _db.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+                if (usuario != null)
+                {
+                    listaCompras = todasLasCompras.Where(c =>
+                        c.Correo.ToLower() == usuario.Correo.ToLower()).ToList();
+                }
+            }
         }
 
         public IActionResult OnGetEliminar(int id)
@@ -76,12 +95,27 @@ namespace SistemaRegistros.Pages
 
         public IActionResult OnGetExportarExcel()
         {
-            var compras = _compraGestor.ObtenerTodos();
+            var rol = HttpContext.Session.GetString("UsuarioRol");
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            List<Compra> compras;
+
+            if (rol == "Admin")
+            {
+                compras = _compraGestor.ObtenerTodos();
+            }
+            else
+            {
+                var todasLasCompras = _compraGestor.ObtenerTodos();
+                var usuario = _db.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
+                compras = usuario != null
+                    ? todasLasCompras.Where(c => c.Correo.ToLower() == usuario.Correo.ToLower()).ToList()
+                    : new List<Compra>();
+            }
 
             using var workbook = new XLWorkbook();
             var hoja = workbook.Worksheets.Add("Compras");
 
-            hoja.Cell(1, 1).Value = "HISTORIAL DE COMPRAS - TECHSTORE";
+            hoja.Cell(1, 1).Value = "HISTORIAL DE COMPRAS - PRUEBA";
             hoja.Range(1, 1, 1, 10).Merge();
             hoja.Cell(1, 1).Style.Font.Bold = true;
             hoja.Cell(1, 1).Style.Font.FontSize = 16;
@@ -133,7 +167,7 @@ namespace SistemaRegistros.Pages
             workbook.SaveAs(stream);
             var contenido = stream.ToArray();
 
-            return File(contenido, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Prueba_BD.xlsx");
+            return File(contenido, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Compras.xlsx");
         }
     }
 }

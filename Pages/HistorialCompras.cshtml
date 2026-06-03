@@ -1,11 +1,22 @@
 @page
 @model SistemaRegistros.Pages.HistorialComprasModel
 
+@{
+    var rol = HttpContext.Session.GetString("UsuarioRol");
+}
+
 <div class="navbar">
     <a class="navbar-brand" href="/">PRUEBA</a>
     <div class="navbar-links">
         <a href="/ProductosDisponibles">Productos</a>
-        <a href="/HistorialCompras">Historial de Compras</a>
+        <a href="/FormularioPQR">PQRS</a>
+        <a href="/HistorialCompras">Historial</a>
+        @if (rol == "Admin")
+        {
+            <a href="/AdminPQR">Admin PQRS</a>
+            <a href="/VisorBD">📊 Base de Datos</a>
+        }
+        <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
     </div>
 </div>
 
@@ -13,13 +24,16 @@
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
         <h1 class="titulo-pagina" style="margin-bottom:0;">Historial de Compras</h1>
         <div style="display:flex; gap:10px; align-items:center;">
-            <form method="post" enctype="multipart/form-data">
-                <label class="btn-importar">
-                    <span class="texto">IMPORTAR</span>
-                    <input type="file" name="archivoExcel" accept=".xlsx" style="display:none;"
-                           onchange="this.form.submit()" />
-                </label>
-            </form>
+            @if (rol == "Admin")
+            {
+                <form method="post" enctype="multipart/form-data">
+                    <label class="btn-importar">
+                        <span class="texto">IMPORTAR</span>
+                        <input type="file" name="archivoExcel" accept=".xlsx" style="display:none;"
+                               onchange="this.form.submit()" />
+                    </label>
+                </form>
+            }
             <a href="/HistorialCompras?handler=ExportarExcel" class="btn-exportar">
                 <span class="texto">EXPORTAR</span>
             </a>
@@ -44,7 +58,10 @@
                     <th>Cantidad</th>
                     <th>Total</th>
                     <th>Fecha</th>
-                    <th>Acciones</th>
+                    @if (rol == "Admin")
+                    {
+                        <th>Acciones</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -60,14 +77,17 @@
                         <td>@compra.Cantidad</td>
                         <td>$@compra.Total.ToString("N0")</td>
                         <td>@compra.FechaCompra.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td style="display:flex; gap:5px;">
-                            <a href="/EditarCompra?id=@compra.Id" class="btn-accion btn-editar">
-                                <span class="texto">EDITAR</span>
-                            </a>
-                            <a href="/HistorialCompras?handler=Eliminar&id=@compra.Id" class="btn-accion btn-eliminar">
-                                <span class="texto">ELIMINAR</span>
-                            </a>
-                        </td>
+                        @if (rol == "Admin")
+                        {
+                            <td style="display:flex; gap:5px;">
+                                <a href="/EditarCompra?id=@compra.Id" class="btn-accion btn-editar">
+                                    <span class="texto">EDITAR</span>
+                                </a>
+                                <a href="/HistorialCompras?handler=Eliminar&amp;id=@compra.Id" class="btn-accion btn-eliminar">
+                                    <span class="texto">ELIMINAR</span>
+                                </a>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

@@ -1,13 +1,25 @@
 @page
 @model SistemaRegistros.Pages.FormularioCompraModel
 
+@{
+    var rol = HttpContext.Session.GetString("UsuarioRol");
+}
+
 <div class="navbar">
     <a class="navbar-brand" href="/">PRUEBA</a>
     <div class="navbar-links">
         <a href="/ProductosDisponibles">Productos</a>
-        <a href="/HistorialCompras">Historial de Compras</a>
+        <a href="/FormularioPQR">PQRS</a>
+        <a href="/HistorialCompras">Historial</a>
+        @if (rol == "Admin")
+        {
+            <a href="/AdminPQR">Admin PQRS</a>
+            <a href="/VisorBD">📊 Base de Datos</a>
+        }
+        <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
     </div>
 </div>
+
 
 <div class="contenedor">
     <h1 class="titulo-pagina">Formulario de Compra</h1>

@@ -1,0 +1,43 @@
+@page
+@model SistemaRegistros.Pages.RegistroModel
+
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background-color:#f4f6f9;">
+    <div class="formulario-card" style="width:400px;">
+        <div style="text-align:center; margin-bottom:30px;">
+            <h1 style="color:#1a1a2e; font-size:28px; font-weight:bold;">REGISTRO</h1>
+            <p style="color:#666; font-size:14px;">Crea tu cuenta</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div
+                style="background:#ffe0e0; color:#c0392b; padding:10px 15px; border-radius:8px; margin-bottom:20px; font-size:14px;">
+                ⚠️ @Model.ErrorMessage
+            </div>
+        }
+
+        <form method="post">
+            <div class="campo">
+                <label>Nombre</label>
+                <input type="text" name="Nombre" placeholder="Tu nombre completo" required />
+            </div>
+            <div class="campo">
+                <label>Correo</label>
+                <input type="email" name="Correo" placeholder="tucorreo@email.com" required />
+            </div>
+            <div class="campo">
+                <label>Contraseña</label>
+                <input type="password" name="Contrasena" placeholder="Tu contraseña" required />
+            </div>
+            <div class="campo">
+                <label>Confirmar Contraseña</label>
+                <input type="password" name="ConfirmarContrasena" placeholder="Repite tu contraseña" required />
+            </div>
+            <button type="submit" class="btn-confirmar">✅ Registrarse</button>
+        </form>
+
+        <p style="text-align:center; margin-top:20px; font-size:14px; color:#666;">
+            ¿Ya tienes cuenta? <a href="/Login" style="color:#e94560;">Inicia sesión</a>
+        </p>
+    </div>
+</div>

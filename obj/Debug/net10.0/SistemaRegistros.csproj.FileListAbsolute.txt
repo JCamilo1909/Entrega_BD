@@ -657,3 +657,4 @@ E:\WORK\SistemaRegistros\obj\Debug\net10.0\refint\SistemaRegistros.dll
 E:\WORK\SistemaRegistros\obj\Debug\net10.0\SistemaRegistros.pdb
 E:\WORK\SistemaRegistros\obj\Debug\net10.0\SistemaRegistros.genruntimeconfig.cache
 E:\WORK\SistemaRegistros\obj\Debug\net10.0\ref\SistemaRegistros.dll
+D:\WORK\SistemaRegistros\obj\Debug\net10.0\SistemaRegistros.sourcelink.json
