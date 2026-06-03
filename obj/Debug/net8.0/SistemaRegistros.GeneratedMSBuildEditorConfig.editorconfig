@@ -1,0 +1,96 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v8.0
+build_property.EntryPointFilePath = 
+build_property.RootNamespace = SistemaRegistros
+build_property.RootNamespace = SistemaRegistros
+build_property.ProjectDir = D:\WORK\SistemaRegistros\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\WORK\SistemaRegistros
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/WORK/SistemaRegistros/Pages/AdminPQR.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5QUVIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/EditarCompra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdGFyQ29tcHJhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/FormularioCompra.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXVsYXJpb0NvbXByYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/FormularioPQR.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXVsYXJpb1BRUi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/HistorialCompras.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSGlzdG9yaWFsQ29tcHJhcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/ProductosDisponibles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zRGlzcG9uaWJsZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Registro.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/VisorBD.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVmlzb3JCRC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/WORK/SistemaRegistros/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-lqarc0aw7g
