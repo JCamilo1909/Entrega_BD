@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SistemaRegistros.Data;
 using SistemaRegistros.Services;
+using SistemaRegistros.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,24 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 app.MapRazorPages();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<BaseDatos>();
+    db.Database.EnsureCreated();
+
+    if (!db.Usuarios.Any())
+    {
+        db.Usuarios.Add(new Usuario
+        {
+            Nombre = "Administrador",
+            Correo = "admin@prueba.com",
+            Contrasena = "admin123",
+            Rol = "Admin"
+        });
+
+        db.SaveChanges();
+    }
+}
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Run($"http://0.0.0.0:{port}");
