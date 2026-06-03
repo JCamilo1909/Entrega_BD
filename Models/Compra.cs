@@ -7,6 +7,7 @@ namespace SistemaRegistros.Models
         public string ApellidoCliente { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
         public string Telefono { get; set; } = string.Empty;
+        public string Ciudad { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
         public int? ProductoId { get; set; }
         public Producto? Producto { get; set; }
