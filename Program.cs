@@ -8,8 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ProductoGestor>();
 builder.Services.AddSingleton<CompraGestor>();
+
 builder.Services.AddDbContext<BaseDatos>(options =>
-    options.UseSqlite("Data Source=Prueba.db"));
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    }
+    else
+    {
+        options.UseSqlite("Data Source=/app/data/Prueba.db");
+    }
+});
 
 builder.Services.AddSession(options =>
 {
@@ -32,6 +42,7 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 app.MapRazorPages();
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<BaseDatos>();
@@ -46,7 +57,6 @@ using (var scope = app.Services.CreateScope())
             Contrasena = "admin123",
             Rol = "Admin"
         });
-
         db.SaveChanges();
     }
 }
