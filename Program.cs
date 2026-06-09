@@ -6,8 +6,8 @@ using SistemaRegistros.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<ProductoGestor>();
-builder.Services.AddSingleton<CompraGestor>();
+builder.Services.AddScoped<ProductoGestor>();
+builder.Services.AddScoped<CompraGestor>();
 
 builder.Services.AddDbContext<BaseDatos>(options =>
 {

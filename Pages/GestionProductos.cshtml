@@ -1,0 +1,64 @@
+@page
+@model SistemaRegistros.Pages.GestionProductosModel
+
+<div class="navbar">
+    <a class="navbar-brand" href="/">PRUEBA</a>
+    <div class="navbar-links">
+        <a href="/ProductosDisponibles">Productos</a>
+        <a href="/FormularioPQR">PQRS</a>
+        <a href="/HistorialCompras">Historial</a>
+        <a href="/AdminPQR">Admin PQRS</a>
+        <a href="/GestionProductos">Gestion Productos</a>
+        <a href="/VisorBD">📊 Base de Datos</a>
+        <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
+    </div>
+</div>
+
+<div class="contenedor">
+    <h1 class="titulo-pagina">Gestión de Productos</h1>
+
+    <table class="tabla-historial">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var producto in Model.listaProductos)
+            {
+                <tr>
+                    <td>@producto.Id</td>
+                    <td>@producto.Nombre</td>
+                    <td>@producto.Categoria</td>
+                    <td colspan="3">
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <form method="post" style="display:flex; gap:8px; align-items:center; margin:0;">
+                                <input type="hidden" name="id" value="@producto.Id" />
+                                <input type="number" name="precio" value="@producto.Precio" min="0" step="1000"
+                                       style="width:120px; padding:6px; border:1px solid #ccc; border-radius:5px;" />
+                                <span
+                                style="color:#666; font-size:13px; min-width:110px;">($@producto.Precio.ToString("N0"))</span>
+                                <input type="number" name="stock" value="@producto.Stock" min="0"
+                                       style="width:80px; padding:6px; border:1px solid #ccc; border-radius:5px;" />
+                                <button type="submit" asp-page-handler="Actualizar" class="btn-accion btn-editar">
+                                    <span class="texto">GUARDAR</span>
+                                </button>
+                            </form>
+                            <form method="post" onsubmit="return confirm('¿Eliminar este producto?');" style="margin:0;">
+                                <input type="hidden" name="id" value="@producto.Id" />
+                                <button type="submit" asp-page-handler="Eliminar" class="btn-accion btn-eliminar">
+                                    <span class="texto">ELIMINAR</span>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

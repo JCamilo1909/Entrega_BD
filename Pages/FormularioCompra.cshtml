@@ -3,6 +3,9 @@
 
 @{
     var rol = HttpContext.Session.GetString("UsuarioRol");
+    var nombreUsuario = HttpContext.Session.GetString("UsuarioNombre") ?? "";
+    var apellidoUsuario = HttpContext.Session.GetString("UsuarioApellido") ?? "";
+    var correoUsuario = HttpContext.Session.GetString("UsuarioCorreo") ?? "";
 }
 
 <div class="navbar">
@@ -27,33 +30,53 @@
     <div class="formulario-card">
         <h2>📦 @Model.ProductoSeleccionado?.Nombre</h2>
         <p style="color:#666; margin-bottom:10px;">@Model.ProductoSeleccionado?.Descripcion</p>
-        <p class="precio" style="margin-bottom:25px;">$@Model.ProductoSeleccionado?.Precio.ToString("N0")</p>
+        <p class="precio" style="margin-bottom:10px;">$@Model.ProductoSeleccionado?.Precio.ToString("N0")</p>
+        <p class="stock" style="margin-bottom:25px;">✅ Stock disponible: @Model.ProductoSeleccionado?.Stock unidades</p>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div
+                style="background:#ffe0e0; color:#c0392b; padding:10px 15px; border-radius:8px; margin-bottom:20px; font-size:14px;">
+                ⚠️ @Model.ErrorMessage
+            </div>
+        }
 
         <form method="post">
             <input type="hidden" name="Compra.ProductoId" value="@Model.ProductoSeleccionado?.Id" />
 
-            <div class="campo">
+<div class="campo">
                 <label>Nombre</label>
-                <input type="text" name="Compra.NombreCliente" placeholder="Tu nombre" required />
+                <input type="text" name="Compra.NombreCliente" value="@nombreUsuario" placeholder="Tu nombre" required />
             </div>
             <div class="campo">
                 <label>Apellido</label>
-                <input type="text" name="Compra.ApellidoCliente" placeholder="Tu apellido" required />
+                <input type="text" name="Compra.ApellidoCliente" value="@apellidoUsuario" placeholder="Tu apellido" required />
             </div>
             <div class="campo">
                 <label>Correo</label>
-                <input type="email" name="Compra.Correo" placeholder="tucorreo@email.com" required />
+                <input type="email" name="Compra.Correo" value="@correoUsuario" placeholder="tucorreo@email.com" required />
             </div>
             <div class="campo">
                 <label>Teléfono</label>
                 <input type="text" name="Compra.Telefono" placeholder="Tu teléfono" required />
             </div>
             <div class="campo">
+                <label>Departamento</label>
+                <select name="Compra.Departamento" id="selectDepartamento" required
+                        style="width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:8px; font-size:14px;">
+                    <option value="">Cargando departamentos...</option>
+                </select>
+            </div>
+            <div class="campo">
                 <label>Ciudad</label>
                 <select name="Compra.Ciudad" id="selectCiudad" required
-                    style="width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:8px; font-size:14px;">
-                    <option value="">Cargando ciudades...</option>
+                        style="width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:8px; font-size:14px;">
+                    <option value="">Primero selecciona un departamento</option>
                 </select>
+            </div>
+            <div class="campo">
+                <label>Barrio</label>
+                <input type="text" name="Compra.Barrio" placeholder="Tu barrio" required />
             </div>
             <div class="campo">
                 <label>Dirección de entrega</label>
@@ -61,7 +84,8 @@
             </div>
             <div class="campo">
                 <label>Cantidad</label>
-                <input type="number" name="Compra.Cantidad" value="1" min="1" required />
+                <input type="number" name="Compra.Cantidad" value="1" min="1" max="@Model.ProductoSeleccionado?.Stock"
+                       required />
             </div>
 
             <button type="submit" class="btn-confirmar">✅ Confirmar Compra</button>
@@ -70,22 +94,57 @@
 </div>
 
 <script>
-    fetch('https://api-colombia.com/api/v1/City')
+    const selectDepartamento = document.getElementById('selectDepartamento');
+    const selectCiudad = document.getElementById('selectCiudad');
+
+    // 1. Cargar los departamentos al abrir la pagina
+    fetch('https://api-colombia.com/api/v1/Department')
         .then(response => response.json())
-        .then(ciudades => {
-            const select = document.getElementById('selectCiudad');
-            select.innerHTML = '<option value="">Selecciona tu ciudad</option>';
-            ciudades
+        .then(departamentos => {
+            selectDepartamento.innerHTML = '<option value="">Selecciona tu departamento</option>';
+            departamentos
                 .sort((a, b) => a.name.localeCompare(b.name))
-                .forEach(ciudad => {
+                .forEach(depto => {
                     const option = document.createElement('option');
-                    option.value = ciudad.name;
-                    option.textContent = ciudad.name;
-                    select.appendChild(option);
+                    // Renombrar Bogota para que se entienda que es el Distrito Capital
+                    const nombreMostrar = depto.name === 'Bog' || depto.name.includes('Bogot') ? 'Bogotá D.C.' : depto.name;
+                    option.value = nombreMostrar;
+                    option.setAttribute('data-id', depto.id);
+                    option.textContent = nombreMostrar;
+                    selectDepartamento.appendChild(option);
                 });
         })
         .catch(() => {
-            const select = document.getElementById('selectCiudad');
-            select.innerHTML = '<option value="">Error cargando ciudades</option>';
+            selectDepartamento.innerHTML = '<option value="">Error cargando departamentos</option>';
         });
+
+    // 2. Cuando se elige un departamento, cargar sus ciudades
+    selectDepartamento.addEventListener('change', function () {
+        const opcionSeleccionada = selectDepartamento.options[selectDepartamento.selectedIndex];
+        const departamentoId = opcionSeleccionada.getAttribute('data-id');
+
+        if (!departamentoId) {
+            selectCiudad.innerHTML = '<option value="">Primero selecciona un departamento</option>';
+            return;
+        }
+
+        selectCiudad.innerHTML = '<option value="">Cargando ciudades...</option>';
+
+        fetch('https://api-colombia.com/api/v1/Department/' + departamentoId + '/cities')
+            .then(response => response.json())
+            .then(ciudades => {
+                selectCiudad.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+                ciudades
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .forEach(ciudad => {
+                        const option = document.createElement('option');
+                        option.value = ciudad.name;
+                        option.textContent = ciudad.name;
+                        selectCiudad.appendChild(option);
+                    });
+            })
+            .catch(() => {
+                selectCiudad.innerHTML = '<option value="">Error cargando ciudades</option>';
+            });
+    });
 </script>

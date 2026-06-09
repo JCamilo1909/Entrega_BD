@@ -35,8 +35,7 @@ namespace SistemaRegistros.Services
             var db = scope.ServiceProvider.GetRequiredService<BaseDatos>();
             compra.FechaCompra = compra.FechaCompra == default ? DateTime.Now : compra.FechaCompra;
             compra.Producto = null;
-            if (!conservarId)
-                compra.Id = 0;
+            compra.Id = 0;
             db.Compras.Add(compra);
             db.SaveChanges();
         }

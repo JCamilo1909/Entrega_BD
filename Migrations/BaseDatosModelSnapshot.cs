@@ -17,7 +17,7 @@ namespace SistemaRegistros.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,6 +34,10 @@ namespace SistemaRegistros.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Barrio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
@@ -42,6 +46,10 @@ namespace SistemaRegistros.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Departamento")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -107,6 +115,84 @@ namespace SistemaRegistros.Migrations
                     b.ToTable("PQRs");
                 });
 
+            modelBuilder.Entity("SistemaRegistros.Models.Producto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Categoria")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Productos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1001,
+                            Categoria = "Televisores",
+                            Descripcion = "Smart TV 42 pulgadas Full HD",
+                            Nombre = "Televisor Samsung",
+                            Precio = 3000000m,
+                            Stock = 10
+                        },
+                        new
+                        {
+                            Id = 1002,
+                            Categoria = "Computadores",
+                            Descripcion = "Intel Core i5, 8GB RAM, 256GB SSD",
+                            Nombre = "Laptop Lenovo",
+                            Precio = 2500000m,
+                            Stock = 5
+                        },
+                        new
+                        {
+                            Id = 1003,
+                            Categoria = "Celulares",
+                            Descripcion = "128GB, Color Negro",
+                            Nombre = "iPhone 14",
+                            Precio = 4000000m,
+                            Stock = 8
+                        },
+                        new
+                        {
+                            Id = 1004,
+                            Categoria = "Audio",
+                            Descripcion = "Inalámbricos con cancelación de ruido",
+                            Nombre = "Audifonos Sony",
+                            Precio = 300000m,
+                            Stock = 15
+                        },
+                        new
+                        {
+                            Id = 1005,
+                            Categoria = "Tablets",
+                            Descripcion = "iPad 10ma generación 64GB",
+                            Nombre = "Tablet",
+                            Precio = 900000m,
+                            Stock = 7
+                        });
+                });
+
             modelBuilder.Entity("SistemaRegistros.Models.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -114,6 +200,10 @@ namespace SistemaRegistros.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Contrasena")
                         .IsRequired()
@@ -139,6 +229,7 @@ namespace SistemaRegistros.Migrations
                         new
                         {
                             Id = 1,
+                            Apellido = "",
                             Contrasena = "admin123",
                             Correo = "admin@prueba.com",
                             Nombre = "Administrador",
@@ -147,6 +238,7 @@ namespace SistemaRegistros.Migrations
                         new
                         {
                             Id = 2,
+                            Apellido = "",
                             Contrasena = "super123",
                             Correo = "supervisor@prueba.com",
                             Nombre = "Supervisor",

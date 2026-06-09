@@ -11,6 +11,7 @@ namespace SistemaRegistros.Pages
         private readonly CompraGestor _compraGestor;
 
         public Producto? ProductoSeleccionado { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
 
         [BindProperty]
         public Compra Compra { get; set; } = new Compra();
@@ -29,12 +30,37 @@ namespace SistemaRegistros.Pages
         public IActionResult OnPost()
         {
             var producto = _productoGestor.ObtenerPorId(Compra.ProductoId ?? 0);
-            if (producto != null)
+
+            if (producto == null)
             {
-                Compra.Total = producto.Precio * Compra.Cantidad;
-                Compra.Producto = null;
+                ErrorMessage = "El producto no existe.";
+                return Page();
             }
+
+            // Validar que la cantidad sea valida
+            if (Compra.Cantidad < 1)
+            {
+                ProductoSeleccionado = producto;
+                ErrorMessage = "La cantidad debe ser al menos 1.";
+                return Page();
+            }
+
+            // Validar que no se compre mas del stock disponible
+            if (Compra.Cantidad > producto.Stock)
+            {
+                ProductoSeleccionado = producto;
+                ErrorMessage = $"Solo hay {producto.Stock} unidades disponibles. No puedes comprar {Compra.Cantidad}.";
+                return Page();
+            }
+
+            // Calcular total y guardar la compra
+            Compra.Total = producto.Precio * Compra.Cantidad;
+            Compra.Producto = null;
             _compraGestor.Agregar(Compra);
+
+            // Descontar el stock
+            _productoGestor.DescontarStock(producto.Id, Compra.Cantidad);
+
             return RedirectToPage("/HistorialCompras");
         }
     }

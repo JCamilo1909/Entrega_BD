@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SistemaRegistros.Data;
 using SistemaRegistros.Models;
 using SistemaRegistros.Services;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using System.Text;
+using System.Text.Json;
 
 namespace SistemaRegistros.Pages
 {
@@ -22,25 +27,29 @@ namespace SistemaRegistros.Pages
             _db = db;
         }
 
-        public void OnGet()
+        // Metodo auxiliar: filtra las compras segun el rol del usuario
+        private List<Compra> ObtenerComprasSegunRol()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
             var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
 
             if (rol == "Admin")
             {
-                listaCompras = _compraGestor.ObtenerTodos();
+                return _compraGestor.ObtenerTodos();
             }
             else
             {
                 var todasLasCompras = _compraGestor.ObtenerTodos();
                 var usuario = _db.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
-                if (usuario != null)
-                {
-                    listaCompras = todasLasCompras.Where(c =>
-                        c.Correo.ToLower() == usuario.Correo.ToLower()).ToList();
-                }
+                return usuario != null
+                    ? todasLasCompras.Where(c => c.Correo.ToLower() == usuario.Correo.ToLower()).ToList()
+                    : new List<Compra>();
             }
+        }
+
+        public void OnGet()
+        {
+            listaCompras = ObtenerComprasSegunRol();
         }
 
         public IActionResult OnGetEliminar(int id)
@@ -93,24 +102,10 @@ namespace SistemaRegistros.Pages
             return RedirectToPage("/HistorialCompras");
         }
 
+        // ===== EXPORTAR EXCEL =====
         public IActionResult OnGetExportarExcel()
         {
-            var rol = HttpContext.Session.GetString("UsuarioRol");
-            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
-            List<Compra> compras;
-
-            if (rol == "Admin")
-            {
-                compras = _compraGestor.ObtenerTodos();
-            }
-            else
-            {
-                var todasLasCompras = _compraGestor.ObtenerTodos();
-                var usuario = _db.Usuarios.FirstOrDefault(u => u.Id == usuarioId);
-                compras = usuario != null
-                    ? todasLasCompras.Where(c => c.Correo.ToLower() == usuario.Correo.ToLower()).ToList()
-                    : new List<Compra>();
-            }
+            var compras = ObtenerComprasSegunRol();
 
             using var workbook = new XLWorkbook();
             var hoja = workbook.Worksheets.Add("Compras");
@@ -165,9 +160,134 @@ namespace SistemaRegistros.Pages
 
             using var stream = new MemoryStream();
             workbook.SaveAs(stream);
-            var contenido = stream.ToArray();
+            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Compras.xlsx");
+        }
 
-            return File(contenido, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Compras.xlsx");
+        // ===== EXPORTAR CSV =====
+        public IActionResult OnGetExportarCsv()
+        {
+            var compras = ObtenerComprasSegunRol();
+            var sb = new StringBuilder();
+            sb.AppendLine("ID,Nombre,Apellido,Correo,Telefono,Direccion,Producto,Cantidad,Total,Fecha");
+
+            foreach (var c in compras)
+            {
+                var producto = (c.Producto?.Nombre ?? "N/A").Replace(",", " ");
+                sb.AppendLine($"{c.Id},{c.NombreCliente},{c.ApellidoCliente},{c.Correo},{c.Telefono},{c.Direccion?.Replace(",", " ")},{producto},{c.Cantidad},{c.Total},{c.FechaCompra:dd/MM/yyyy HH:mm}");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            return File(bytes, "text/csv", "Compras.csv");
+        }
+
+        // ===== EXPORTAR TXT =====
+        public IActionResult OnGetExportarTxt()
+        {
+            var compras = ObtenerComprasSegunRol();
+            var sb = new StringBuilder();
+            sb.AppendLine("HISTORIAL DE COMPRAS - PRUEBA");
+            sb.AppendLine("=========================================");
+            sb.AppendLine();
+
+            foreach (var c in compras)
+            {
+                sb.AppendLine($"ID: {c.Id}");
+                sb.AppendLine($"Cliente: {c.NombreCliente} {c.ApellidoCliente}");
+                sb.AppendLine($"Correo: {c.Correo}");
+                sb.AppendLine($"Telefono: {c.Telefono}");
+                sb.AppendLine($"Direccion: {c.Direccion}");
+                sb.AppendLine($"Producto: {c.Producto?.Nombre ?? "N/A"}");
+                sb.AppendLine($"Cantidad: {c.Cantidad}");
+                sb.AppendLine($"Total: ${c.Total:N0}");
+                sb.AppendLine($"Fecha: {c.FechaCompra:dd/MM/yyyy HH:mm}");
+                sb.AppendLine("-----------------------------------------");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            return File(bytes, "text/plain", "Compras.txt");
+        }
+
+        // ===== EXPORTAR JSON =====
+        public IActionResult OnGetExportarJson()
+        {
+            var compras = ObtenerComprasSegunRol();
+            var datos = compras.Select(c => new
+            {
+                c.Id,
+                c.NombreCliente,
+                c.ApellidoCliente,
+                c.Correo,
+                c.Telefono,
+                c.Direccion,
+                Producto = c.Producto?.Nombre ?? "N/A",
+                c.Cantidad,
+                c.Total,
+                Fecha = c.FechaCompra.ToString("dd/MM/yyyy HH:mm")
+            });
+
+            var opciones = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(datos, opciones);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            return File(bytes, "application/json", "Compras.json");
+        }
+
+        // ===== EXPORTAR PDF =====
+        public IActionResult OnGetExportarPdf()
+        {
+            var compras = ObtenerComprasSegunRol();
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            var documento = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4.Landscape());
+                    page.Margin(30);
+                    page.Header().Text("Historial de Compras - PRUEBA")
+                        .FontSize(18).Bold().FontColor(Colors.Blue.Darken3);
+
+                    page.Content().PaddingTop(15).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(30);
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.RelativeColumn();
+                            columns.ConstantColumn(50);
+                            columns.RelativeColumn();
+                        });
+
+                        table.Header(header =>
+                        {
+                            void Celda(string texto) => header.Cell().Background(Colors.Blue.Darken3).Padding(5)
+                                .Text(texto).FontColor(Colors.White).Bold().FontSize(9);
+                            Celda("ID");
+                            Celda("Cliente");
+                            Celda("Correo");
+                            Celda("Producto");
+                            Celda("Total");
+                            Celda("Cant");
+                            Celda("Fecha");
+                        });
+
+                        foreach (var c in compras)
+                        {
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text(c.Id.ToString()).FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text($"{c.NombreCliente} {c.ApellidoCliente}").FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text(c.Correo).FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text(c.Producto?.Nombre ?? "N/A").FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text($"${c.Total:N0}").FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text(c.Cantidad.ToString()).FontSize(8);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5).Text(c.FechaCompra.ToString("dd/MM/yyyy")).FontSize(8);
+                        }
+                    });
+                });
+            });
+
+            var pdfBytes = documento.GeneratePdf();
+            return File(pdfBytes, "application/pdf", "Compras.pdf");
         }
     }
 }

@@ -36,6 +36,8 @@ namespace SistemaRegistros.Pages
             }
 
             HttpContext.Session.SetString("UsuarioNombre", usuario.Nombre);
+            HttpContext.Session.SetString("UsuarioApellido", usuario.Apellido);
+            HttpContext.Session.SetString("UsuarioCorreo", usuario.Correo);
             HttpContext.Session.SetString("UsuarioRol", usuario.Rol);
             HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
 

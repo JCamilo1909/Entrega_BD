@@ -19,19 +19,45 @@
         <form method="post">
             <div class="campo">
                 <label>Nombre</label>
-                <input type="text" name="Nombre" placeholder="Tu nombre completo" required />
+                <input type="text" name="Nombre" value="@Model.Nombre" placeholder="Tu nombre" required />
+            </div>
+            <div class="campo">
+                <label>Apellido</label>
+                <input type="text" name="Apellido" value="@Model.Apellido" placeholder="Tu apellido" required />
             </div>
             <div class="campo">
                 <label>Correo</label>
-                <input type="email" name="Correo" placeholder="tucorreo@email.com" required />
+                <input type="email" name="Correo" value="@Model.Correo" placeholder="tucorreo@email.com" required />
             </div>
             <div class="campo">
                 <label>Contraseña</label>
-                <input type="password" name="Contrasena" placeholder="Tu contraseña" required />
+                <div style="position:relative;">
+                    <input type="password" id="campoContrasena" name="Contrasena" placeholder="Tu contraseña" required
+                           style="width:100%; padding-right:45px;" />
+                    <span onclick="verContrasena('campoContrasena', this)"
+                          style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; display:flex;">
+                        <svg class="icono-ojo" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </span>
+                </div>
             </div>
             <div class="campo">
                 <label>Confirmar Contraseña</label>
-                <input type="password" name="ConfirmarContrasena" placeholder="Repite tu contraseña" required />
+                <div style="position:relative;">
+                    <input type="password" id="campoConfirmar" name="ConfirmarContrasena"
+                           placeholder="Repite tu contraseña" required style="width:100%; padding-right:45px;" />
+                    <span onclick="verContrasena('campoConfirmar', this)"
+                          style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; display:flex;">
+                        <svg class="icono-ojo" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </span>
+                </div>
             </div>
             <button type="submit" class="btn-confirmar">✅ Registrarse</button>
         </form>
@@ -41,3 +67,19 @@
         </p>
     </div>
 </div>
+
+<script>
+    function verContrasena(idCampo, contenedor) {
+        const campo = document.getElementById(idCampo);
+        const svg = contenedor.querySelector('svg');
+        if (campo.type === "password") {
+            campo.type = "text";
+            // Ojo cerrado (pestañas hacia abajo)
+            svg.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7"/><line x1="4" y1="16" x2="3" y2="18"/><line x1="8" y1="18" x2="7.5" y2="20.5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="16" y1="18" x2="16.5" y2="20.5"/><line x1="20" y1="16" x2="21" y2="18"/>';
+        } else {
+            campo.type = "password";
+            // Ojo abierto (con círculo)
+            svg.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>';
+        }
+    }
+</script>

@@ -14,6 +14,7 @@
         @if (rol == "Admin")
         {
             <a href="/AdminPQR">Admin PQRS</a>
+            <a href="/GestionProductos">Gestion Productos</a>
             <a href="/VisorBD">📊 Base de Datos</a>
         }
         <a href="/Login" style="color:#e94560;">Cerrar Sesión</a>
@@ -27,7 +28,7 @@
         <span style="color:#666; font-size:13px;">🔄 Actualizando cada 5 segundos...</span>
     </div>
 
-    <!-- USUARIOS -->
+   <!-- USUARIOS -->
     <h2 style="color:#1a1a2e; font-size:18px; margin-bottom:15px; border-left:4px solid #e94560; padding-left:10px;">👥
         Usuarios</h2>
         <table class="tabla-historial" style="margin-bottom:35px;">
@@ -37,6 +38,7 @@
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Rol</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +53,14 @@
                                 style="background:@(usuario.Rol == "Admin" ? "#e94560" : "#28a745"); color:white; padding:3px 10px; border-radius:20px; font-size:12px;">
                                 @usuario.Rol
                             </span>
+                        </td>
+                        <td>
+                            <form method="post" onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');" style="margin:0;">
+                                <input type="hidden" name="id" value="@usuario.Id" />
+                                <button type="submit" asp-page-handler="EliminarUsuario" class="btn-accion btn-eliminar">
+                                    <span class="texto">ELIMINAR</span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
