@@ -10,6 +10,7 @@ namespace SistemaRegistros.Pages
     public class RegistroModel : PageModel
     {
         private readonly BaseDatos _db;
+        private readonly Services.CorreoServicio _correoServicio;
 
         public string ErrorMessage { get; set; } = string.Empty;
 
@@ -28,9 +29,10 @@ namespace SistemaRegistros.Pages
         [BindProperty]
         public string ConfirmarContrasena { get; set; } = string.Empty;
 
-        public RegistroModel(BaseDatos db)
+        public RegistroModel(BaseDatos db, Services.CorreoServicio correoServicio)
         {
             _db = db;
+            _correoServicio = correoServicio;
         }
 
         public void OnGet()
@@ -80,6 +82,24 @@ namespace SistemaRegistros.Pages
             _db.Usuarios.Add(nuevoUsuario);
             _db.SaveChanges();
 
+            // Enviar correo de bienvenida
+            var cuerpo = $@"
+                <div style='font-family:Arial, sans-serif; max-width:600px; margin:0 auto;'>
+                    <div style='background:#1a1a2e; padding:25px; text-align:center;'>
+                        <h1 style='color:#e94560; margin:0;'>¡Bienvenido a PRUEBA!</h1>
+                    </div>
+                    <div style='padding:30px; background:#f4f6f9;'>
+                        <p style='font-size:16px; color:#333;'>Hola <strong>{nuevoUsuario.Nombre} {nuevoUsuario.Apellido}</strong>,</p>
+                        <p style='font-size:15px; color:#555;'>Tu cuenta ha sido creada exitosamente. Ya puedes iniciar sesión y empezar a comprar.</p>
+                        <p style='font-size:14px; color:#777; margin-top:25px;'>Correo registrado: {nuevoUsuario.Correo}</p>
+                    </div>
+                    <div style='background:#1a1a2e; padding:15px; text-align:center;'>
+                        <p style='color:#999; font-size:12px; margin:0;'>Sistema PRUEBA - Notificación automática</p>
+                    </div>
+                </div>";
+
+            _correoServicio.Enviar(nuevoUsuario.Correo, "Cuenta creada con éxito - PRUEBA", cuerpo);
+
             HttpContext.Session.SetString("UsuarioNombre", nuevoUsuario.Nombre);
             HttpContext.Session.SetString("UsuarioApellido", nuevoUsuario.Apellido);
             HttpContext.Session.SetString("UsuarioCorreo", nuevoUsuario.Correo);
@@ -115,7 +135,7 @@ namespace SistemaRegistros.Pages
             if (!Regex.IsMatch(correo, patron))
                 return "El correo no es válido. Debe tener un formato como nombre@dominio.com";
 
-                 // 2. Verifica que el dominio exista y pueda recibir correos
+            // 2. Verifica que el dominio exista y pueda recibir correos
             try
             {
                 var dominio = correo.Split('@')[1];

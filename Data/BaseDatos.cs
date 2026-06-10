@@ -21,7 +21,7 @@ namespace SistemaRegistros.Data
 
             // Admin por defecto
             modelBuilder.Entity<Usuario>().HasData(
-                new Usuario { Id = 1, Nombre = "Administrador", Correo = "admin@prueba.com", Contrasena = "admin123", Rol = "Admin" },
+                new Usuario { Id = 1, Nombre = "Administrador", Correo = "pruebascorreo1909@gmail.com", Contrasena = "admin123", Rol = "Admin" },
                 new Usuario { Id = 2, Nombre = "Supervisor", Correo = "supervisor@prueba.com", Contrasena = "super123", Rol = "Admin" }
             );
 

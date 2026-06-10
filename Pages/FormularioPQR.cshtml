@@ -2,6 +2,9 @@
 @model SistemaRegistros.Pages.FormularioPQRModel
 @{
     var rol = HttpContext.Session.GetString("UsuarioRol");
+    var nombreUsuario = HttpContext.Session.GetString("UsuarioNombre") ?? "";
+    var apellidoUsuario = HttpContext.Session.GetString("UsuarioApellido") ?? "";
+    var correoUsuario = HttpContext.Session.GetString("UsuarioCorreo") ?? "";
 }
 
 <div class="navbar">
@@ -45,11 +48,13 @@
             </div>
             <div class="campo">
                 <label>Nombre</label>
-                <input type="text" name="PQR.Nombre" placeholder="Tu nombre completo" required />
+                <input type="text" name="PQR.Nombre" value="@(nombreUsuario + " " + apellidoUsuario)"
+                       placeholder="Tu nombre completo" required />
             </div>
             <div class="campo">
                 <label>Correo</label>
-                <input type="email" name="PQR.Correo" placeholder="tucorreo@email.com" required />
+                <input type="email" name="PQR.Correo" value="@correoUsuario" placeholder="tucorreo@email.com"
+                       required />
             </div>
             <div class="campo">
                 <label>Mensaje</label>

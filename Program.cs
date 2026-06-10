@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ProductoGestor>();
 builder.Services.AddScoped<CompraGestor>();
+builder.Services.AddScoped<CorreoServicio>();
 
 builder.Services.AddDbContext<BaseDatos>(options =>
 {

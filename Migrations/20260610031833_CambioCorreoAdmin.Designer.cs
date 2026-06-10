@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaRegistros.Data;
 
@@ -11,9 +12,11 @@ using SistemaRegistros.Data;
 namespace SistemaRegistros.Migrations
 {
     [DbContext(typeof(BaseDatos))]
-    partial class BaseDatosModelSnapshot : ModelSnapshot
+    [Migration("20260610031833_CambioCorreoAdmin")]
+    partial class CambioCorreoAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
